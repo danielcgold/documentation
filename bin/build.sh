@@ -28,4 +28,7 @@ rm -rf "${jet_source}"
 # Compile the site
 log "Building with base URL /${target}"
 sed -i'' -e "s|^baseurl:.*|baseurl: /${target}|" _config.yml
-bundle exec jekyll build --destination "${destination}"
+bundle exec jekyll build --destination "${destination}" 2>&1| tee build.log
+
+# Fail if the build log from Jekyll contains any Deprecations
+! cat build.log | grep "Deprecation" -c
